@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 220" width="360" height="220">
+  <defs>
+    <!-- Cat body gradient -->
+    <linearGradient id="catBodyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFD166" />
+      <stop offset="100%" stop-color="#F4A236" />
+    </linearGradient>
+    <linearGradient id="earInnerGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFAAA6" />
+      <stop offset="100%" stop-color="#FF85A1" />
+    </linearGradient>
+    <!-- Shadow filter -->
+    <filter id="catShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#7B3F00" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#catShadow)">
+    <!-- Left Ear -->
+    <path d="M 95 95 L 65 20 C 62 14 74 12 84 20 L 130 65 Z" fill="#F4A236" stroke="#D97706" stroke-width="3" stroke-linejoin="round" />
+    <path d="M 92 85 L 72 32 C 70 28 78 26 84 32 L 120 65 Z" fill="url(#earInnerGrad)" />
+
+    <!-- Right Ear -->
+    <path d="M 265 95 L 295 20 C 298 14 286 12 276 20 L 230 65 Z" fill="#F4A236" stroke="#D97706" stroke-width="3" stroke-linejoin="round" />
+    <path d="M 268 85 L 288 32 C 290 28 282 26 276 32 L 240 65 Z" fill="url(#earInnerGrad)" />
+
+    <!-- Main Head / Body -->
+    <path d="M 90 175 C 60 135 70 80 120 60 C 150 48 210 48 240 60 C 290 80 300 135 270 175 C 255 190 220 195 180 195 C 140 195 105 190 90 175 Z" 
+          fill="url(#catBodyGrad)" stroke="#D97706" stroke-width="3.5" />
+
+    <!-- Forehead Stripes -->
+    <path d="M 180 62 L 180 82" stroke="#B45309" stroke-width="4.5" stroke-linecap="round" />
+    <path d="M 166 65 L 168 81" stroke="#B45309" stroke-width="4" stroke-linecap="round" />
+    <path d="M 194 65 L 192 81" stroke="#B45309" stroke-width="4" stroke-linecap="round" />
+
+    <!-- Cheeks Blush -->
+    <ellipse cx="120" cy="138" rx="14" ry="9" fill="#FF85A1" opacity="0.6" />
+    <ellipse cx="240" cy="138" rx="14" ry="9" fill="#FF85A1" opacity="0.6" />
+
+    <!-- Cute Eyes (Happy curved arcs like in screenshot) -->
+    <path d="M 125 118 Q 140 102 155 118" fill="none" stroke="#451A03" stroke-width="4.5" stroke-linecap="round" />
+    <path d="M 205 118 Q 220 102 235 118" fill="none" stroke="#451A03" stroke-width="4.5" stroke-linecap="round" />
+    <!-- Eyelashes -->
+    <path d="M 124 116 L 118 111" stroke="#451A03" stroke-width="3" stroke-linecap="round" />
+    <path d="M 236 116 L 242 111" stroke="#451A03" stroke-width="3" stroke-linecap="round" />
+
+    <!-- Cute Little Nose -->
+    <polygon points="180,126 174,120 186,120" fill="#92400E" stroke="#92400E" stroke-linejoin="round" stroke-width="2" />
+
+    <!-- Mouth (Cute :3 cat mouth) -->
+    <path d="M 180 126 L 180 132 M 180 132 Q 172 140 166 133 M 180 132 Q 188 140 194 133" 
+          fill="none" stroke="#451A03" stroke-width="3.5" stroke-linecap="round" />
+
+    <!-- Whiskers Left -->
+    <path d="M 108 128 L 78 122" stroke="#92400E" stroke-width="2.5" stroke-linecap="round" />
+    <path d="M 106 136 L 76 138" stroke="#92400E" stroke-width="2.5" stroke-linecap="round" />
+    <path d="M 108 144 L 80 152" stroke="#92400E" stroke-width="2.5" stroke-linecap="round" />
+
+    <!-- Whiskers Right -->
+    <path d="M 252 128 L 282 122" stroke="#92400E" stroke-width="2.5" stroke-linecap="round" />
+    <path d="M 254 136 L 284 138" stroke="#92400E" stroke-width="2.5" stroke-linecap="round" />
+    <path d="M 252 144 L 280 152" stroke="#92400E" stroke-width="2.5" stroke-linecap="round" />
+
+    <!-- Left Paw resting over badge -->
+    <g transform="translate(68, 155)">
+      <path d="M 10 10 C 5 25 12 48 35 48 C 55 48 58 28 50 12 C 45 4 20 2 10 10 Z" 
+            fill="url(#catBodyGrad)" stroke="#D97706" stroke-width="3" />
+      <!-- Toe dividers -->
+      <path d="M 25 45 L 25 35" stroke="#B45309" stroke-width="2.5" stroke-linecap="round" />
+      <path d="M 37 45 L 37 35" stroke="#B45309" stroke-width="2.5" stroke-linecap="round" />
+    </g>
+
+    <!-- Right Paw resting over badge -->
+    <g transform="translate(242, 155)">
+      <path d="M 40 10 C 45 25 38 48 15 48 C -5 48 -8 28 0 12 C 5 4 30 2 40 10 Z" 
+            fill="url(#catBodyGrad)" stroke="#D97706" stroke-width="3" />
+      <!-- Toe dividers -->
+      <path d="M 13 45 L 13 35" stroke="#B45309" stroke-width="2.5" stroke-linecap="round" />
+      <path d="M 25 45 L 25 35" stroke="#B45309" stroke-width="2.5" stroke-linecap="round" />
+    </g>
+  </g>
+</svg>
