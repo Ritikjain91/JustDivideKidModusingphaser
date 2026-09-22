@@ -3,274 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Just Divide — Kid Mode</title>
-  <meta name="description" content="A fun, educational math puzzle game for kids to master division, factors, multiples, and equal values.">
+  <title>Just Divide — Kid Mode (Phaser 3)</title>
+  <meta name="description" content="A fun, educational math puzzle game for kids to master division, factors, multiples, and equal values built with Phaser 3.">
   
-  <!-- Google Fonts: Fredoka for cheerful rounded game typography -->
+  <!-- Google Fonts: Fredoka & Nunito for cheerful rounded game typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700;800&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
   
   <link rel="icon" type="image/svg+xml" href="assets/cat.svg">
   <link rel="stylesheet" href="style.css">
+
+  <!-- Phaser 3 Engine (Local with CDN fallback) -->
+  <script src="libs/phaser.min.js"></script>
+  <script>
+    if (typeof Phaser === 'undefined') {
+      document.write('<script src="https://cdn.jsdelivr.net/npm/phaser@3.80.1/dist/phaser.min.js"><\/script>');
+    }
+  </script>
 </head>
 <body>
-  <!-- Background Pattern -->
-  <div class="bg-wallpaper"></div>
-
-  <!-- 1440x1024 Design Canvas Wrapper -->
-  <div id="game-stage" class="game-stage">
-    
-    <!-- Top Header Bar -->
-    <header class="top-header">
-      <div class="header-left">
-        <button id="btn-pause" class="action-btn purple-btn" title="Pause Game (P)" aria-label="Pause">
-          <span class="pause-bars"><span></span><span></span></span>
-        </button>
-        <button id="btn-undo" class="action-btn orange-btn" title="Undo Move (Z)" aria-label="Undo">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 10h10a5 5 0 0 1 5 5v2a5 5 0 0 1-5 5H6"></path>
-            <path d="M7 6L3 10l4 4"></path>
-          </svg>
-        </button>
-      </div>
-
-      <div class="header-center">
-        <h1 class="game-title">JUST DIVIDE</h1>
-        
-        <div class="timer-badge">
-          <img src="assets/hourglass.svg" class="hourglass-icon" alt="Timer" />
-          <span id="session-timer">00:00</span>
-        </div>
-
-        <div class="subtitle-banner">
-          <span>DIVIDE WITH THE NUMBERS TO SOLVE THE ROWS AND COLUMNS.</span>
-        </div>
-      </div>
-
-      <div class="header-right">
-        <button id="btn-hint" class="action-btn teal-btn" title="Toggle Hints (G)" aria-label="Toggle Hints">
-          <span class="btn-icon">💡</span>
-          <span id="hint-status-text" class="btn-label">HINTS</span>
-        </button>
-        <button id="btn-sound" class="action-btn yellow-btn" title="Mute/Unmute Audio" aria-label="Toggle Sound">
-          <span id="sound-icon">🔊</span>
-        </button>
-        <button id="btn-help" class="action-btn green-btn" title="How to Play (?)" aria-label="Help">
-          <span>?</span>
-        </button>
-        <button id="btn-fullscreen" class="action-btn grey-btn" title="Toggle Fullscreen" aria-label="Fullscreen">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
-          </svg>
-        </button>
-      </div>
-    </header>
-
-    <!-- Mascot & Badges Section -->
-    <div class="mascot-section">
-      <!-- Cartoon Cat Anchor -->
-      <div class="cat-anchor">
-        <img src="assets/cat.svg" alt="Cat Mascot" class="cat-img" />
-      </div>
-
-      <!-- Badges Bar aligned with cat paws -->
-      <div class="badges-row">
-        <!-- Level Badge (Left) -->
-        <div class="badge-box level-badge">
-          <span class="badge-title">LEVEL</span>
-          <span id="display-level" class="badge-number">1</span>
-        </div>
-
-        <!-- Score & Best Badge (Right) -->
-        <div class="badge-box score-badge">
-          <div class="badge-stat primary-stat">
-            <span class="badge-title">SCORE</span>
-            <span id="display-score" class="badge-number">0</span>
-          </div>
-          <div class="badge-divider"></div>
-          <div class="badge-stat secondary-stat">
-            <span class="best-title">BEST</span>
-            <span id="display-best" class="best-number">0</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Main Gameplay Area (Grid + Right Action Panel) -->
-    <main class="gameplay-container">
-      
-      <!-- 4x4 Grid Board -->
-      <div class="board-frame">
-        <div id="grid-board" class="grid-board" role="grid" aria-label="4 by 4 Number Grid">
-          <!-- 16 Cells will be rendered dynamically by JavaScript -->
-        </div>
-      </div>
-
-      <!-- Right-Side Vertical Action Panel -->
-      <aside class="action-panel">
-        
-        <!-- 7.1 KEEP Slot -->
-        <div class="panel-section keep-section">
-          <div id="keep-slot" class="slot-box keep-slot-box" data-slot="keep" title="Click or drop here to store/swap tile">
-            <div class="slot-placeholder-icon">★</div>
-          </div>
-          <div class="panel-tag keep-tag">KEEP</div>
-        </div>
-
-        <!-- 7.2 Upcoming Tiles Stack -->
-        <div class="panel-section queue-section">
-          <div class="queue-stack" id="queue-stack" title="Upcoming tiles">
-            <!-- Rendered by JS: Active Draggable tile on top, 2 preview tiles behind/stacked -->
-          </div>
-        </div>
-
-        <!-- 7.3 TRASH Box -->
-        <div class="panel-section trash-section">
-          <div class="panel-tag trash-tag">TRASH</div>
-          <div id="trash-slot" class="slot-box trash-slot-box" data-slot="trash" title="Click or drop tile here to discard">
-            <img src="assets/trash.svg" class="trash-icon" alt="Trash" />
-            <div class="trash-badge">
-              <span id="display-trash-count">X10</span>
-            </div>
-          </div>
-        </div>
-
-      </aside>
-
-    </main>
-
-    <!-- Bottom Controls & Difficulty Toolbar -->
-    <footer class="bottom-bar">
-      <div class="controls-guide">
-        <span class="guide-item"><kbd>Z</kbd> Undo</span>
-        <span class="guide-item"><kbd>R</kbd> Restart</span>
-        <span class="guide-item"><kbd>G</kbd> Hints</span>
-        <span class="guide-item"><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> Difficulty</span>
-      </div>
-
-      <div class="difficulty-picker">
-        <span class="diff-label">DIFFICULTY:</span>
-        <button class="diff-btn active" data-diff="easy" id="diff-easy">EASY (1)</button>
-        <button class="diff-btn" data-diff="medium" id="diff-medium">MEDIUM (2)</button>
-        <button class="diff-btn" data-diff="hard" id="diff-hard">HARD (3)</button>
-      </div>
-    </footer>
-
-    <!-- Floating Level Up Toast -->
-    <div id="level-toast" class="level-toast hidden">
-      <div class="toast-content">
-        <span class="toast-star">⭐</span>
-        <span class="toast-text">LEVEL UP!</span>
-        <span class="toast-bonus">+3 TRASH USES!</span>
-      </div>
-    </div>
-
-  </div> <!-- End of game-stage -->
-
-  <!-- MODALS -->
-
-  <!-- Help / How To Play Modal -->
-  <div id="help-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="help-title">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h2 id="help-title">🐱 How to Play "Just Divide"</h2>
-        <button class="modal-close-btn" id="btn-close-help" aria-label="Close">✕</button>
-      </div>
-      <div class="modal-body">
-        <section class="rules-section">
-          <h3>🎯 The Objective</h3>
-          <p>Drag or tap numbered tiles onto the 4×4 grid. Divide and match adjacent tiles to solve numbers and keep the board clear!</p>
-        </section>
-
-        <section class="rules-section">
-          <h3>✨ Merge Rules</h3>
-          <div class="rule-card">
-            <strong>1. Equal Tiles → Both Disappear!</strong>
-            <p>Placing <strong>4</strong> next to <strong>4</strong> causes both to vanish into points.</p>
-          </div>
-          <div class="rule-card">
-            <strong>2. Divisible Tiles → Divide & Merge!</strong>
-            <p><strong>Larger ÷ Smaller</strong> must be a whole number.</p>
-            <ul>
-              <li>Placing <strong>12</strong> next to <strong>3</strong>: 12 ÷ 3 = 4. The 3 disappears and the 12 becomes <strong>4</strong>!</li>
-              <li>Placing <strong>15</strong> next to <strong>5</strong> → becomes <strong>3</strong>.</li>
-              <li>Placing <strong>9</strong> next to <strong>3</strong> → becomes <strong>3</strong>.</li>
-            </ul>
-          </div>
-          <div class="rule-card">
-            <strong>3. If Result is 1 → Tile Vanishes!</strong>
-            <p>Division or equal tiles producing 1 disappear completely from the grid.</p>
-          </div>
-        </section>
-
-        <section class="rules-section">
-          <h3>🎒 Keep & Trash</h3>
-          <ul>
-            <li><strong>KEEP Slot</strong>: Store a tile for later or swap it with your active tile.</li>
-            <li><strong>TRASH Box</strong>: Discard unwanted tiles. Uses are limited, but you gain +3 every level!</li>
-            <li><strong>Leveling Up</strong>: Every 10 points advances your level.</li>
-          </ul>
-        </section>
-
-        <section class="rules-section">
-          <h3>⌨️ Keyboard Shortcuts</h3>
-          <div class="kbd-table">
-            <div><kbd>Z</kbd> Undo move</div>
-            <div><kbd>R</kbd> Restart game</div>
-            <div><kbd>G</kbd> Toggle hints</div>
-            <div><kbd>1, 2, 3</kbd> Switch difficulty</div>
-          </div>
-        </section>
-      </div>
-      <div class="modal-footer">
-        <button class="modal-action-btn" id="btn-got-it">LET'S PLAY!</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Pause / Settings Modal -->
-  <div id="pause-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
-    <div class="modal-card mini-card">
-      <div class="modal-header">
-        <h2>Game Paused</h2>
-      </div>
-      <div class="modal-body text-center">
-        <p>Take a breath! Your timer is paused.</p>
-        <div class="pause-actions">
-          <button id="btn-resume" class="modal-action-btn big-btn">▶ RESUME</button>
-          <button id="btn-restart" class="modal-action-btn secondary-btn">🔄 RESTART GAME</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Game Over Modal -->
-  <div id="gameover-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h2>Game Over! 🐾</h2>
-      </div>
-      <div class="modal-body text-center">
-        <div class="gameover-cat">🐱</div>
-        <p class="gameover-desc">No more valid merges can be made!</p>
-        <div class="final-scores">
-          <div class="score-pill">
-            <span class="score-label">FINAL SCORE</span>
-            <span id="final-score" class="score-val">0</span>
-          </div>
-          <div class="score-pill best-pill">
-            <span class="score-label">BEST SCORE</span>
-            <span id="final-best" class="score-val">0</span>
-          </div>
-        </div>
-        <div id="new-high-badge" class="high-score-tag hidden">🎉 NEW BEST SCORE! 🎉</div>
-      </div>
-      <div class="modal-footer">
-        <button id="btn-play-again" class="modal-action-btn big-btn">PLAY AGAIN 🎮</button>
-      </div>
-    </div>
-  </div>
+  <!-- Phaser Game Canvas Mount -->
+  <div id="game-container"></div>
 
   <!-- Main Game Script -->
   <script src="main.js"></script>
